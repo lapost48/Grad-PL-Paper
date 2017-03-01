@@ -1,0 +1,90 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                   Package Imports                       %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{multicol}                                     %%
+\usepackage{titlesec}                                     %%
+\usepackage{ragged2e}                                     %%
+\usepackage[linktocpage=true]{hyperref}                   %%
+\usepackage{tabularx}                                     %%
+\newcolumntype{Y}{>{\centering\arraybackslash}X}          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                   Page Formatting                       %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                                          %%
+                                                          %%
+                                                          %%
+                                                          %%
+                                                          %%
+                                                          %%
+                                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                   Make Title                            %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\and {                                                %%
+    \vspace{0.5cm}\\                                      %%
+}                                                         %%
+                                                          %%
+\def\email {                                              %%
+\\                                                        %%
+}                                                         %%
+                                                          %%
+\newcommand\maketitlepage {                               %%
+    \pagenumbering{gobble}                                %%
+    \newgeometry{top=2in}                                 %%
+    \centering\Large\textbf{\@title}\\                    %%
+    \vspace{0.75in}                                       %%
+    \@date                                                %%
+                                                          %%
+    \vspace{\fill}                                        %%
+    \small                                                %%
+                                                          %%
+    \begin{tabularx}{\textwidth}{Y Y Y}                   %%
+        \@author                                          %%
+    \end{tabularx}                                        %%
+    \newgeometry{top=1in}                                 %%
+    \justify\normalsize                                   %%
+}                                                         %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                   Table of Contents                     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand*\contentsname{Table of Contents}            %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%              Section Title Formatting                  %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\chapter[1]{                                   %%
+    \columnbreak                                          %%
+    \section{#1}                                          %%
+}                                                         %%
+                                                          %%
+\titleformat{\section}                                    %%
+        {\hrule\Large\bfseries}                           %%
+        {\smash{\thesection\hspace{1em}}}                 %%
+        {0em}                                             %%
+        {}                                                %%
+        [\hrule]                                          %%
+                                                          %%
+\titleformat{\subsection}                                 %%
+        {\vspace{-0.25cm}\normalsize\bfseries}            %%
+        {\smash{\thesubsection\hspace{1em}}}              %%
+        {0em}                                             %%
+        {}                                                %%
+        [\hrule]                                          %%
+                                                          %%
+\titleformat{\subsubsection}                              %%
+        {\vspace{-0.25cm}\normalsize\bfseries}            %%
+        {\smash{\thesubsubsection\hspace{1em}}}           %%
+        {0em}                                             %%
+       {}                                                 %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

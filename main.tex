@@ -1,0 +1,63 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{pl_paper}
+
+
+\usepackage{lipsum}
+
+
+
+\title{Concurrent Programming Languages}
+\author{
+    Nick LaPosta & Chris Heisler & Derek Gaffney \email lapost48@students.rowan.edu & heislerc0@students.rowan.edu  & gaffneyd4@students.rowan.edu \and John Bucknam & Johnathon Saunders & Jatin Bhakta \email bucknamj8@students.rowan.edu & saundersj0@students.rowan.edu & bhaktaj7@students.rowan.edu
+    }
+\date{February 21, 2017}
+
+\begin{document}
+
+\maketitlepage
+
+\tableofcontents
+
+\begin{multicols*}{2}\raggedcolumns\pagenumbering{arabic}
+
+    \section{Introduction}
+    
+        \input{1_intro}
+    
+    \section{Go}
+        
+        \input{2_go}
+        \cite{donovan2015go}
+        \cite{website:go-lang-documentation}
+        \cite{deshpande2016analysis}
+        \cite{prell:hal-00718924}
+        
+    \section{Swift-Lang}
+    
+        \input{3_swift}
+        \cite{website:swift-lang-documentation}
+        \cite{wilde2011swift}
+        \cite{wilde2009parallel}
+        \cite{hategan2011coasters}
+        
+    \section{Clojure}
+    
+        \input{4_clojure}
+        \cite{Jensen:2016:EST:3005729.3005737}
+        \cite{Dhiman:2013:CMP:2555523.2555573}
+        \cite{Kraus:2009:MPC:1562868.1562870}
+        \cite{Ertel:2015:OID:2807426.2807431}
+        
+    \section{Conclusion}
+    
+        \input{5_conclusion}
+        
+\end{multicols*}
+
+\addtocontents{toc}{\protect\newpage}
+\bibliography{references}{\pagenumbering{gobble}}
+\bibliographystyle{acm}
+
+\end{document}
