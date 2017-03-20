@@ -7,8 +7,9 @@
 	A goroutine is created simply by prefixing the keyword \emph{go} to a function call.	
 \begin{lstlisting}[language=Go]
 go innerprod(a, b, ch) 
-\\ Execute the inner product function concurrently as a goroutine,
-\\ do not wait for it to finish.
+// Execute the inner product function
+// concurrently as a goroutine,
+// do not wait for it to finish.
 \end{lstlisting}
 Function innerprod(a, b, ch) takes the inner product of a row vector \emph{a} and column vector \emph{b}. The parameter \emph{ch} is of type channel, which will be discussed thoroughly in the next section. Then, a detailed explination of the function will provided in our matrix multiplication program section. To digress, the important point here is to convey the simplicity of creating a goroutine, that any function may be run concurrently by prefixing the keyword \emph{go}. However, if the function does not recieve a channel, then the goroutine will not be able to properly return variables or signal its completion.
 \begin{lstlisting}[language=Go]
@@ -20,11 +21,15 @@ func badgoroutine(a, b){
 A goroutine should never be used as shown above. In fact this code has created a race condition, and is general example of bad concurrent programming.
 	One last feature to note, Go function lterals are closures, thus ensureing variables referred to by the function remain until they are no longer needed. A code snippet from the Golang documentation demostrates the use of a function literal in a goroutine function literal.
 \begin{lstlisting}[language=Go]
-func Announce(message string, delay time.Duration) {
+func Announce(message string, 
+	delay time.Duration) {
+
     go func() {
         time.Sleep(delay)
         fmt.Println(message)
-    }()  // Note the parentheses - must call the function.
+    }()  
+    /* Note the parentheses - must
+       call the function. */
 }.
 \end{lstlisting}
 \subsection{Channels}
@@ -43,13 +48,18 @@ cs := make(chan int, 100)
 It creates a buffered channel of pointers to integers. 
 If a channel is unbuffered Go will use a combination of communication and synchronization to ensure that the goroutines are within a known state.  A use full demonstration of using channels with goroutines is to having a channel on a variable do a sort within goroutine. Then give a value to that while everything outside the routine continues until it arrives at the channeled variable. This would cause it to wait until the goroutine operating on the variable has finished before continuing.  This is a general implementation of what I have just described:
 \begin{lstlisting}[language=Go]
-c := make(chan int)  //makes an unbuffered channel of type int
-// Start a goroutine wait for
-// it to complete then signal on the channel.
+c := make(chan int)  
+/* makes an unbuffered 
+   channel of type int.
+   Start a goroutine wait for
+   it to complete then signal 
+   on the channel. */
 go func() {
     list.Sort()// sorts some list 
-    c <- 1  // Send a signal, 
-	    // the value does not matter for this demonstration.
+    c <- 1  
+    /* Send a signal, 
+       the value does not matter 
+       or this demonstration. */
 }()
 doSomethingForAWhile()
 <-c   // Waits for sort to finish; 
@@ -63,12 +73,16 @@ func handle(queue chan *Request) {
     }
 }
 
-func Serve(clientRequests chan *Request, quit chan bool) {
+func Serve(clientRequests chan 
+	*Request, quit chan bool) {
+
     // Start handlers
-    for i := 0; i < MaxOutstanding; i++ {
+    for i := 0; i < MaxOutstanding;
+    i++ {
         go handle(clientRequests)
     }
-    <-quit  // Wait to be told to exit.
+    <-quit 
+   // Wait to be told to exit.
 } 
 \end{lstlisting}
 A very important property to remember in go is the first class values can be passed around like any other values. This can be used to to create safe and parallel demultiplexing. As an example we will be dissecting the handle function from above. If you recall, in the previous example, we did not define the type it was handling. If they type has a channel where it can reply the client is able to determine it own path to the answer. This is a schematic of type Result :
@@ -88,17 +102,20 @@ func sum(a []int) (s int) {
     return
 }
 
-request := &Request{[]int{3, 4, 5}, sum, make(chan int)}
+request := &Request{[]int{3, 4, 5}, 
+	 	sum, make(chan int)}
 // Send request
 clientRequests <- request
 // Wait for response.
-fmt.Printf("answer: %d\n", <-request.resultChan)
+fmt.Printf("answer: %d\n",
+		<-request.resultChan)
 \end{lstlisting}
 On the back end the handler is the only thing that changes. 
 \begin{lstlisting}[language=Go]
 func handle(queue chan *Request) {
     for req := range queue {
-        req.resultChan <- req.f(req.args)
+        req.resultChan <- req.f(
+			    req.args)
     }
 } 
 \end{lstlisting}
