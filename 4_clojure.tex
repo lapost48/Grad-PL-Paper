@@ -1,0 +1,97 @@
+\subsection{History of Clojure}
+    General Summary of the history of the Clojure programming language.
+    
+	Clojure is a dynamic, general-purpose programming language that supports concurrency and functional programming. Every one of Clojure's feature is supported at run-time. Clojure has derived from the language Lisp, where inheriting the "code-as-data" philosophy and the macro system features from Lisp. Clojure is a community-driven development process and is handled by Clojure community website. Clojure is hosted on the Java Virtual Machine (JVM), sharing the JVM type system and threads. All functions developed are compiled down to JVM bytecode. In addition, Clojure supports dynamic implementation of Java interfaces and classes.
+	
+\subsubsection{Author(s), Dates}
+
+    Clojure was first introduced to the public on October 16, 2007 by creator Rich Hickey. Hickey wanted a "Lisp-friendly" interface to Java that can be used as a modern Lisp functional programming language and specifically designed for concurrency. Hickey worked on Clojure for nearly two and half years before it's initial release in 2007, without much outside funding. Since then, Clojure has had nine more releases introducing primitive support, improved hashing algorithms, direct linking, and socket server, just to name a few.
+
+\subsubsection{What was available before Clojure?}
+
+    Clojure offers multiple ways to simplify multi-threaded programming, but concurrency is still difficult. However, before Clojure, the popular programming languages were C++ and Java, which haven't evolved much in constructs of concurrent programming (threads, locks) throughout decades. Threads and locks are very basic concurrency features. \cite{galpin_2010}
+
+\subsubsection{Why Clojure?}
+
+    What did Clojure do differently / add / bring into the concurrent programming world? (Generally)
+        (Use https://clojure.org/about/state sections from Imperative Programming to Working Models and Identity)
+        \cite{website:clojure-lang-reference}
+    
+    Differences: No primitives, threads, and locks. (These are common in other languages.) Clojure uses concurrency models, four different ones. Each model can symbolize an abstraction above threads and locks.
+    
+    4 types of Models:*
+    
+    1.) Thread local vars
+    2.) Synchronous atoms
+    3.) Transactional refs
+    4.) Asynchronous agents
+    
+    *Briefly describe each one
+    
+    To what extent do the language borrow ideas from earlier languages?
+    
+    *Explain similiarities between Clojure and C++/Java, and other earlier languages.
+    
+    \cite{galpin_2010}
+    
+	
+\subsection{Design Choices / Features}
+    
+   Clojure features an array of paradigms and features that help it to be concurrent. Its functional programming paradigm helps set the foundation for many of these practices and includes functions, immutable data structures, and recursive looping. Functions in Clojure do not allow for side effects - they take in values and return new values. Immutable data structures avoid mutating state and provide for \textit{Persistence}, a term used to describe the property where an old version of a collection is still available after a change. Recursive looping is used in the absence of mutable local variables while ensuring that recursive loops use constant space.
+    
+    Clojure's elegant solution to concurrency is accomplished in several ways. Its overall method of maintaining consistent state, the Software Transactional Memory System (STM), supports information sharing between threads in both  a synchronous and coordinated manner.
+    
+    As a whole, Clojure deals with concurrency by changing the way programmers think about the state of a program. Clojure considers the values of an identity as nothing more than representing the identity's state, like a snapshot. Since the values are immutable according to Clojure's design, those values can be used and relied upon for reporting or calculation during the course of that identity's state. At another point in time, the identity may acquire a new state with its own values, but this would be considered a new snapshot. Clojure supports this way of thinking by controlling all state changes through Refs and Agents.
+
+\subsubsection{Refs \& Agents}
+
+    Refs and Agents are Clojure's built in tools to support concurrent ``snapshot'' behavior of all identities, and work as such: ``In the case of Refs, any interaction you do must occur within a transaction (else Clojure will throw an exception), all such interaction will see a consistent view of the world as of a point in time, and no changes will proceed unless the states to be changed haven’t been changed by other participants in the meantime. Transactions support synchronous change to multiple Refs. Agents, on the other hand, offer asynchronous change to a single reference. You pass a function and values, and, at some point in the future, that function will be passed the current state of the Agent and the return value of the function will become the Agent’s new state.'' \cite{website:clojure-concurrency}
+    
+    
+
+\subsubsection{Data Structures}
+    
+    As alluded to in the previous section, Clojure's data structures are immutable. Some other properties of Clojure's data structures are:
+    \begin{itemize}
+        \item They are Read-able
+        \item They support proper value equality semantics in their implementation of equals
+        \item They provide good hash values
+    \end{itemize}
+    \cite{website:clojure-lang-reference} Despite the benefits of immutable data structures, there are performance setbacks to creating new data structures, mutating them, and then returning them for immutable use afterwards. Mutating an entire array like that is already O(n). Clojure gets around these performance issues by utilizing Transient Data Structures. Transient Data Structures are ``copies'' of the original data structure that share the source without modifying it. Transients support read-only interfaces like \textbf{nth}, \textbf{get}, and \textbf{count}, but require the use of alternate transient functions (\textbf{assoc!}, \textbf{conj!}) instead of \textbf{assoc} and \textbf{conj} to support parallel `changing' operations. These transient functions allow values to be changed but will only return transient values back. When all desired results have been achieved, the programmer can create a persistent data structure from the transient data structure by calling \textbf{persistent!} on the transient data structure. In all cases performing operations with Transient Data Structures are O(1) and this is a significant performance enhancement.
+    
+    The performance difference can be clearly noted from this code snippet:
+	\begin{lstlisting}[language=clojure]
+(defn vrange [n]
+	(loop [i 0 v []]
+		(if (< i n)
+			(recur (inc i) (conj v i))
+			v)))
+
+(defn vrange2 [n]
+	(loop [i 0 v (transient [])]
+		(if (< i n)
+			(recur (inc i) (conj! v i))
+			(persistent! v))))
+
+;;benchmarked(Java 1.8, Clojure 1.7)
+(def v (vrange 1000000))  ;; 73.7 ms
+(def v2 (vrange2 1000000));; 19.7 ms
+	\end{lstlisting}
+    
+    One key note to make on the use of transients is that they require \textbf{thread isolation}. Each result of a transient operation shares (mutable) structure with the previous, so bad things would happen if more than one thread could alter the transient at once. \cite{website:clojure-lang-reference}
+
+\subsection{Comparison to Java}
+
+    What differences are there in these languages' support for concurrency?
+
+\subsubsection{How does Java do it?}
+
+    Explain concurrency in Java.
+
+\subsubsection{How does Clojure do it?}
+
+    Explain concurrency in Clojure.
+
+\subsubsection{Why is Clojure better?}
+
+    Explain why Clojure is better for concurrency programming.
