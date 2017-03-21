@@ -155,3 +155,35 @@
         }                                                 %%
     }                                                     %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%               Appendix Formating                       %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\startofappendix}{                            %%
+    \newpage                                              %%
+    \pagenumbering{roman}                                 %%
+    \newcounter{appendix}                                 %%
+}                                                         %%
+\renewenvironment{appendix}[1]                            %%
+    {                                                     %%
+    \lstset{                                              %%
+        basicstyle=\normalsize,                           %%
+        numbersep=5pt,                                    %%
+        frame=single}                                     %%
+    \stepcounter{appendix}                                %%
+    \centering\Large                                      %%
+    \textbf{Appendix \Alph{appendix} - #1}\\}             %%
+    {\newpage}                                            %%
+                                                          %%
+\newcommand{\addappendix}[1]{                             %%
+    \begin{minipage}{\textwidth}                          %%
+        \textbf{#1}                                       %%
+    \end{minipage}                                        %%
+}                                                         %%
+                                                          %%
+\newcommand{\addcodeappendix}[2]{                         %%
+    \begin{minipage}{\textwidth}                          %%
+        \lstinputlisting[language=#1]{#2}                 %%
+    \end{minipage}                                        %%
+}                                                         %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
