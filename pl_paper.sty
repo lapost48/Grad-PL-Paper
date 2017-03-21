@@ -1,13 +1,19 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                   Package Imports                       %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage{multicol}                                     %%
-\usepackage{titlesec}                                     %%
-\usepackage{ragged2e}                                     %%
-\usepackage[linktocpage=true]{hyperref}                   %%
-\usepackage{tabularx}                                     %%
-\newcolumntype{Y}{>{\centering\arraybackslash}X}          %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                         Package Imports                         %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}   %%
+\usepackage{multicol}                                             %%
+\usepackage{titlesec}                                             %%
+\usepackage{ragged2e}                                             %%
+\usepackage[linktocpage=true]{hyperref}                           %%
+\usepackage[dvipsnames]{xcolor}                                   %%
+\usepackage{listings}                                             %%
+\usepackage{go_lang}                                              %%
+\usepackage{swift_lang}                                           %%
+\usepackage{clojure_lang}                                         %%
+\usepackage{tabularx}                                             %%
+\newcolumntype{Y}{>{\centering\arraybackslash}X}                  %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -87,4 +93,65 @@
         {\smash{\thesubsubsection\hspace{1em}}}           %%
         {0em}                                             %%
        {}                                                 %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%              Code Listings Formatting                  %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{goodYellow}{HTML}{FF9933}                    %%
+\definecolor{goodGreen}{HTML}{339966}                     %%
+\newcommand{\goColor}                                     %%
+    {                                                     %%
+        \lstset{                                          %%
+            basicstyle=\small,                            %%
+            keywordstyle=\color{goodYellow}\bfseries,     %%
+            identifierstyle=\color{goodGreen}\bfseries,   %%
+            commentstyle=\color{gray},                    %%
+            stringstyle=\ttfamily,                        %%
+            showstringspaces=false,                       %%
+            numbers=left,                                 %%
+            numberblanklines=false,                       %%
+            numberstyle=\tiny,                            %%
+            stepnumber=1,                                 %%
+            numbersep=1pt,                                %%
+            tabsize=2,                                    %%
+            frame=None                                    %%
+        }                                                 %%
+    }                                                     %%
+\newcommand{\swiftColor}                                  %%
+    {                                                     %%
+        \lstset{                                          %%
+            basicstyle=\small,                            %%
+            keywordstyle=\color{Plum}\bfseries,           %%
+            identifierstyle=\color{blue}\bfseries,        %%
+            commentstyle=\color{gray},                    %%
+            stringstyle=\ttfamily,                        %%
+            showstringspaces=false,                       %%
+            numbers=left,                                 %%
+            numberblanklines=false,                       %%
+            numberstyle=\tiny,                            %%
+            stepnumber=1,                                 %%
+            numbersep=5pt,                                %%
+            tabsize=2,                                    %%
+            frame=None                                    %%
+        }                                                 %%
+    }                                                     %%
+\newcommand{\clojureColor}                                %%
+    {                                                     %%
+        \lstset{                                          %%
+            basicstyle=\small,                            %%
+            keywordstyle=\color{Plum}\bfseries,           %%
+            identifierstyle=\color{blue}\bfseries,        %%
+            commentstyle=\color{gray},                    %%
+            stringstyle=\ttfamily,                        %%
+            showstringspaces=false,                       %%
+            numbers=left,                                 %%
+            numberblanklines=false,                       %%
+            numberstyle=\tiny,                            %%
+            stepnumber=1,                                 %%
+            numbersep=5pt,                                %%
+            tabsize=2,                                    %%
+            frame=None                                    %%
+        }                                                 %%
+    }                                                     %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
