@@ -13,9 +13,28 @@
 
 \subsubsection{Why Clojure?}
 
-    What did Clojure do differently / add / bring into the concurrent programming world? (Generally) \cite{website:clojure-lang-reference}
+    What did Clojure do differently / add / bring into the concurrent programming world? (Generally)
+        (Use https://clojure.org/about/state sections from Imperative Programming to Working Models and Identity)
+        \cite{website:clojure-lang-reference}
+    
+    Differences: No primitives, threads, and locks. (These are common in other languages.) Clojure uses concurrency models, four different ones. Each model can symbolize an abstraction above threads and locks.
+    
+    4 types of Models:*
+    
+    1.) Thread local vars
+    2.) Synchronous atoms
+    3.) Transactional refs
+    4.) Asynchronous agents
+    
+    *Briefly describe each one
+    
     To what extent do the language borrow ideas from earlier languages?
     
+    *Explain similiarities between Clojure and C++/Java, and other earlier languages.
+    
+    \cite{galpin_2010}
+    
+	
 \subsection{Design Choices / Features}
     
    Clojure features an array of paradigms and features that help it to be concurrent. Its functional programming paradigm helps set the foundation for many of these practices and includes functions, immutable data structures, and recursive looping. Functions in Clojure do not allow for side effects - they take in values and return new values. Immutable data structures avoid mutating state and provide for \textit{Persistence}, a term used to describe the property where an old version of a collection is still available after a change. Recursive looping is used in the absence of mutable local variables while ensuring that recursive loops use constant space.
@@ -67,12 +86,12 @@
 
 \subsubsection{How does Java do it?}
 
-    Text.
+    Explain concurrency in Java.
 
 \subsubsection{How does Clojure do it?}
 
-    Text.
+    Explain concurrency in Clojure.
 
 \subsubsection{Why is Clojure better?}
 
-    Text.
+    Explain why Clojure is better for concurrency programming.
