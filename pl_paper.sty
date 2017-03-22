@@ -1,19 +1,19 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                         Package Imports                         %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage{geometry}                                             %%
-\usepackage{multicol}                                             %%
-\usepackage{titlesec}                                             %%
-\usepackage{ragged2e}                                             %%
-\usepackage[linktocpage=true]{hyperref}                           %%
-\usepackage[dvipsnames]{xcolor}                                   %%
-\usepackage{listings}                                             %%
-\usepackage{go_lang}                                              %%
-\usepackage{swift_lang}                                           %%
-\usepackage{clojure_lang}                                         %%
-\usepackage{tabularx}                                             %%
-\newcolumntype{Y}{>{\centering\arraybackslash}X}                  %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                     Package Imports                     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[margin=1in]{geometry}                         %%
+\usepackage{multicol}                                     %%
+\usepackage{titlesec}                                     %%
+\usepackage{ragged2e}                                     %%
+\usepackage[linktocpage=true]{hyperref}                   %%
+\usepackage[dvipsnames]{xcolor}                           %%
+\usepackage{listings}                                     %%
+\usepackage{go_lang}                                      %%
+\usepackage{swift_lang}                                   %%
+\usepackage{clojure_lang}                                 %%
+\usepackage{tabularx}                                     %%
+\newcolumntype{Y}{>{\centering\arraybackslash}X}          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -42,19 +42,22 @@
                                                           %%
 \newcommand\maketitlepage {                               %%
     \pagenumbering{gobble}                                %%
-    \newgeometry{top=2in}                                 %%
-    \centering\Large\textbf{\@title}\\                    %%
-    \vspace{0.75in}                                       %%
-    \@date                                                %%
+    \begin{minipage}{\textwidth}                          %%
+        \vspace{3in}                                      %%
+        \centering\Large\textbf{\@title}\\                %%
+        \vspace{0.75in}                                   %%
+        \@date                                            %%
                                                           %%
-    \vspace{\fill}                                        %%
-    \small                                                %%
+    \end{minipage}                                        %%
+    \vfill                                                %%
+    \begin{minipage}{\textwidth}                          %%
+        \small                                            %%
                                                           %%
-    \begin{tabularx}{\textwidth}{Y Y Y}                   %%
-        \@author                                          %%
-    \end{tabularx}                                        %%
-    \newgeometry{margin=1in}                              %%
-    \justify\normalsize                                   %%
+        \begin{tabularx}{\textwidth}{Y Y Y}               %%
+            \@author                                      %%
+        \end{tabularx}                                    %%
+    \end{minipage}                                        %%
+    \newpage\justify\normalsize                           %%
 }                                                         %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
