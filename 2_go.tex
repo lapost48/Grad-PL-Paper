@@ -1,6 +1,9 @@
+\goColor
 \subsection{Introduction to the Go Programing Language}
 	The Go programming language was designed by Robert Griesemer, Rob Pike, and Ken Thompson. A portion of their design focused on creating a new language that supported networked and multi-core computing. Go’s concurrency implementation builds upon ideas from past languages, such as Newsqueak, Alef, Limbo, and C.A.R. Hoare’s 1978 paper, Communicating Sequential Processes (CSP), a formal language for writing concurrent programs. \cite{prell:hal-00718924} This implementation differs from the usual methodology of locks and threads.
+	
 	The core principle of Go is to reduce complexities present in modern programming languages, concurrent programming is one such complexity. The new language provides an approach in which shared values are easily passed between sequential processes. The medium of communication, variable passing, is referred to as a channel. CSP introduced the concept of channels for inter-process communication in a book written by Hoare, published after his original paper. This method of operation, in which processes (goroutines) communicate through channels, is analogous to the programming style of message passing. The use of channels ensures that variables are never actively shared by separate processes, thus data races can never occur. The Go concurrent methodology can be reduced to its slogan, “Do not communicate by sharing memory; instead, share memory by communicating”. \cite{website:go-lang-documentation}
+	
 	Go’s concurrent programming is based on two fundamentals: goroutines and channels. Goroutines have a simple model and can be thought as lightweight threads. Channels serve to handle both communication and synchronization. By default Go’s channels are synchronous, and channels are unbuffered when a buffer size is not specified. \cite{prell:hal-00718924} The specifics of Go’s channel will be discussed later, but first we will cover goroutines, for channels exist to serve them. Lastly, we will discuss parallelization in Go and apply it within our matrix multiplication code.
 \subsection{Goroutines}
 	The term goroutine was made because existing terms for concurrent processes, such as threads, coroutines, process, etc., convey a meaning that inaccurately describes how Go executes functions concurrently. The goroutine model is simple and lightweight, hiding many of the complexities of thread creation and management. Goroutines execute in the same address space, and memory allocation starts at the cost of a small stack space and grows by allocating and freeing as heap storage requires. Goroutines are multiplexed onto OS threads, not process threads, therefore if one goroutine is to block the others will continue to execute.\cite{website:go-lang-documentation}
@@ -19,7 +22,8 @@ func badgoroutine(a, b){
 }
 \end{lstlisting}
 A goroutine should never be used as shown above. In fact this code has created a race condition, and is general example of bad concurrent programming.
-	One last feature to note, Go function literals are closures, thus ensuring variables referred to by the function remain until they are no longer needed. A code snippet from the Golang documentation demonstrates the use of a function literal in a goroutine function literal.
+
+One last feature to note, Go function literals are closures, thus ensuring variables referred to by the function remain until they are no longer needed. A code snippet from the Golang documentation demonstrates the use of a function literal in a goroutine function literal.
 \begin{lstlisting}[language=Go]
 func Announce(message string, 
 	delay time.Duration) {
@@ -33,14 +37,11 @@ func Announce(message string,
 }.
 \end{lstlisting}
 \subsection{Channels}
-Channels use the
-\begin{lstlisting}[language=Go] 
-make()
-\end{lstlisting} 
-function to allocate themselves, the resulting value references the underlying data structure. If you add an integer value as a second parameter (you do not have to add an integer as the second parameter because it is optional) it sets the buffer size of that channel. For example (all following examples were obtained from \cite{website:go-lang-documentation}): 
+Channels use the make() function to allocate themselves, the resulting value references the underlying data structure. If you add an integer value as a second parameter (you do not have to add an integer as the second parameter because it is optional) it sets the buffer size of that channel. For example (all following examples were obtained from \cite{website:go-lang-documentation}): 
 \begin{lstlisting}[language=Go]
 ci := make(chan int)
 \end{lstlisting}
+
 Creates a channel on integers that is unbuffered. Interestingly enough, because the second parameter is optional if it is not entered the default value is 0 so it is the same as coding:
 \begin{lstlisting}[language=Go]
 cj := make(chan int, 0)
@@ -50,6 +51,7 @@ But if you do enter something other than 0 like follows:
 cs := make(chan int, 100) 
 \end{lstlisting}
 It creates a buffered channel of pointers to integers. 
+
 If a channel is unbuffered Go will use a combination of communication and synchronization to ensure that the goroutines are within a known state.  A useful demonstration of using channels with goroutines is to have a channel on a variable and do a sort inside a goroutine. Then give it a value. While everything outside the goroutine will continue until it arrives at the channeled variable. This would cause it to wait until the goroutine operating on the variable has finished before continuing.  This is a general implementation of what I have just described:
 \begin{lstlisting}[language=Go]
 c := make(chan int)  
@@ -68,6 +70,7 @@ go func() {
 doSomethingForAWhile()
 <-c   // Waits for sort to finish; 
 \end{lstlisting}
+
 The blockers, in this case c, will block until data is received. If the channel is an unbuffered channel the sender will block until it receives a value. Otherwise if the channel is buffered the sender only blocks until the buffer has been filled. This mean that if a buffer is full it will wait until a receiver tries to retrieve it. 
 	A buffered channel can be used as a type of semaphore. For instance this example limits throughput:
 \begin{lstlisting}[language=Go]
@@ -89,6 +92,7 @@ func Serve(clientRequests chan
    // Wait to be told to exit.
 } 
 \end{lstlisting}
+
 A very important property to remember in Go is the first class values can be passed around like any other values. This can be used to to create safe and parallel demultiplexing. As an example we will be dissecting the handle function from above. If you recall, in the previous example, we did not define the type it was handling. If the type has a channel where it can reply the client is able to determine its own path to the answer. This is a schematic of type Result :
 \begin{lstlisting}[language=Go]
 type Request struct {
@@ -136,6 +140,12 @@ Mult(b Matrix2d) Matrix2d{
   results := make([]float64,
   rows * cols)
 
+  /*
+    A channel with a buffer size
+    of the number of 
+    computations required
+    for the matrix multiplication.
+  */
   ch := make(chan float64,
   rows * cols)
 
@@ -144,6 +154,22 @@ Mult(b Matrix2d) Matrix2d{
   for i := 0; i < length; i++{
     col = a.getColumn(i)
     for j := 0; j < length; j++{
+      /*
+        The innerprod() function
+        is executed as a
+        goroutine as indicated
+        by the prefix go.
+        The channel that was
+        initiated above is passed
+        as a parameter.
+        Within the function, as
+        each inner product calculation
+        is completed an integer value,
+        specifically 1 in this case,
+        is inserted into the 
+        channel with the ch<-1
+        operation. 
+      */
       go innerprod(col,
       b.Matrix[j*cols:j*cols+cols],
       i, j, ncols, results, ch)
@@ -151,7 +177,7 @@ Mult(b Matrix2d) Matrix2d{
   }
 
   /*
-    Program waits for the channel
+    The program waits for the channel
     to be filled, signaling that
     all the computations are
     completed.
@@ -161,5 +187,27 @@ Mult(b Matrix2d) Matrix2d{
   return Matrix2d{rows,cols,results}
 }
 \end{lstlisting}
-\subsection{Concurrent Matrix Multiplication Results}
+
+The above function exemplifies parralelization in Go. The 2-D matrices \textbf{a} and \textbf{b} are multiplied by using goroutines to calculate the inner products, and storing the result in the corresponding index of a new matrix. Also, a channel is utilized to wait for those calculations to finish, and once finished the channel allows the program to return the resulting matrix of the multiplication. 
+\subsection{Matrix Multiplication Runtime Results}
+The number of seconds to multiply two N by N matrices. For each N, the program was ran 100 times and the average runtime was calculated.
+\begin{center}
+    \begin{tabular}{ | l | l | l | p{5cm} |}
+    \hline
+    N & Average Number of Seconds to Completion \\ \hline
+    100 & 0.002 \\ \hline
+    250 & 0.012 \\ \hline
+    500 & 0.076 \\ \hline
+    750 & 0.221 \\ \hline
+    1000 & 0.574 \\ \hline
+    1500 & 1.869 \\ \hline
+    2000 & 3.985 \\ \hline
+    
+    \hline
+    \end{tabular}
+\end{center}
+\subsection{Our Experience}
+Our time spent implementing the Go Programming Language has been above satisfactory. Goroutines and channels, an elegant yet powerful concurrency model, are a pleasure to work with. Though our matrix multiplication implementation was a parralelization problem rather than a concurrent, the simplicity in which goroutines communicate via shared channels feels intuitive.
+
+Likewise, the Golang documentation is thorough and incredibly helpful. There are many "Go by example" we pages available, in which you can see how a particular package or function is implemented, and you can even run the sample code in your web browser. However, since Go is a relatively young language, there was difficulty in finding sources that provided any extra information that the documentation already had not, and in many cases the documentation would be the only source of these papers. Also, many sources would be out of data, as parts of Go, for example the runtime, are continually in development.
 
