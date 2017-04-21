@@ -1,0 +1,82 @@
+\swiftColor
+When dealing with large collections of data or several different programs, it can be troublesome to configure individual settings or to have a single script run through. Doing this on a normal programming language would require more effort, and may have trouble dealing with either larger amounts of data or is unable to speed up individual tasks. This becomes more pertinent as we use parallel computing to hasten our programs, but how do we manage several programs with larger datasets?
+
+Swift is an implicit, "parallel", scripting language that heavily aids with these distributed tasks, allowing for several of the same or different programs to run concurrently. Although it is currently not a full version, Swift has been used for several scientific programs such as protein structure prediction, glass structure modeling, and modeling climate and economics. There has also been discussion for petascale supercomputing using Swift as the parallel computing language \cite{wilde2009parallel}
+
+What makes Swift so powerful is its built-in support for bash, allowing different Swift applications to run bash commands. This feature allows it to run many different programs in several different programming languages, as they use bash to process them. But how does Swift perform these tasks?
+
+\subsection{Language Basics}
+    Swift is very similar in syntax to languages such as C and Java, but they don't have any object type or class type. Instead, they use data structures, references, and some atomic structures to define their data as well as how they use them for different Swift procedures, instructions, and external calls. \cite{website:swift-lang-documentation}
+
+    \subsubsection{Types}
+        Swift is strongly-typed, with types being \textit{atomic} or \textit{composite}. An atomic type can be a \textit{primitive} (\texttt{int}, \texttt{string}, \texttt{float}, or \texttt{boolean}) or a \textbf{marker} type, which signifies that data for that variable is stored in a single file. As for composite types, they can either be arrays (integers or another primitive type for associative arrays) and a structure used to contain other variables.
+
+        \begin{lstlisting}[language=swift]
+// ----------------
+// Atomic Types
+// ----------------
+
+// Primitives
+string name = "Nick LaPosta";
+
+// Marker Type
+type image;
+image photo <"lena.png">;
+
+// ----------------
+// Composite Types
+// ----------------
+
+// Arrays
+string coolPeople[] = ["John Bucknam"];
+float[string] constants;
+constants["pi"] = 3.1415926535;
+
+// Structures
+type circle {
+    int radius;
+    string color;
+};
+        \end{lstlisting}
+
+    \subsubsection{Procedures}
+        Similar to method and functions in other languages, Swift create \textit{procedures} that can be called in the script after declaration. There are primariliy two types of procedures, compound procedures and atomic procedures.
+
+        Compound procedures run solely Swift operations and other procedures, and can have several inputs and outputs.
+
+        \begin{lstlisting}[language=swift]
+(int output) addtwo (int input) {
+    output = input + 2;
+}
+
+int test = 2;
+int y;
+
+y = addtwo(test);
+        \end{lstlisting}
+
+        Atomic procedures run external, executable program such as bash commands, as well as handles the mapping to different command line arguments. They differ from compound procedures with an \texttt{app} keyword in the beginning of the procedure
+
+        \begin{lstlisting}[language=swift]
+app sayHello (string name) {
+    echo "Hello world, I am " name;
+}
+
+sayHello("Nick");
+    \end{lstlisting}
+
+    \subsubsection{Operators}
+
+    +, -, *, /, etc.
+
+\subsection{Runtime Environment}
+
+How it performs reliable executions on external programs, as well as avoiding job submission penalties. \cite{wilde2011swift}
+
+\subsection{Applications}
+
+What has it been commonly used for? This consists of several, difficult problems in the scientific community and how they rely on parallelization when using large clusters or supercomputers. \cite{wilde2009parallel} \cite{hategan2011coasters}
+
+\subsection{Performance}
+
+How well does it utilize CPUs or perform specific jobs? \cite{wilde2011swift}

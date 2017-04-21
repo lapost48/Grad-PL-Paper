@@ -1,3 +1,4 @@
+\clojureColor
 \subsection{Introduction to Clojure}
 
 \paragraph{History of Clojure}
@@ -84,7 +85,17 @@
     The idea is known as having \textit{persistent} data structures. Identities in Clojure are named entities which change over time, and get new values. A counter may have a value of 42, but after incrementing it, the value is 43: Same counter, same identity, different value. This is different from other languages where variables serve as identities that typically point to a mutable value which are modified in place. \cite{clojure_website:reference}
     
     Now despite the benefits of immutable data structures, there are performance setbacks to creating new data structures, mutating them, and then returning them for immutable use afterwards. Mutating an entire array like that is already O(n). Clojure gets around these performance issues by utilizing Transient Data Structures. Transient Data Structures are ``copies'' of the original data structure that share the source without modifying it. Transients support read-only interfaces like \textbf{nth}, \textbf{get}, and \textbf{count}, but require the use of alternate transient functions (\textbf{assoc!}, \textbf{conj!}) instead of \textbf{assoc} and \textbf{conj} to support parallel `changing' operations. These transient functions allow values to be changed but will only return transient values back. When all desired results have been achieved, the programmer can create a persistent data structure from the transient data structure by calling \textbf{persistent!} on the transient data structure. In all cases performing operations with Transient Data Structures are O(1) and this is a significant performance enhancement.
-    
+ 
+\subsubsection{Data Structures}
+
+    As alluded to in the previous section, Clojure's data structures are immutable. Some other properties of Clojure's data structures are:
+    \begin{itemize}
+        \item They are Read-able
+        \item They support proper value equality semantics in their implementation of equals
+        \item They provide good hash values
+    \end{itemize}
+    \cite{website:clojure-lang-reference} Despite the benefits of immutable data structures, there are performance setbacks to creating new data structures, mutating them, and then returning them for immutable use afterwards. Mutating an entire array like that is already O(n). Clojure gets around these performance issues by utilizing Transient Data Structures. Transient Data Structures are ``copies'' of the original data structure that share the source without modifying it. Transients support read-only interfaces like \textbf{nth}, \textbf{get}, and \textbf{count}, but require the use of alternate transient functions (\textbf{assoc!}, \textbf{conj!}) instead of \textbf{assoc} and \textbf{conj} to support parallel `changing' operations. These transient functions allow values to be changed but will only return transient values back. When all desired results have been achieved, the programmer can create a persistent data structure from the transient data structure by calling \textbf{persistent!} on the transient data structure. In all cases performing operations with Transient Data Structures are O(1) and this is a significant performance enhancement.
+
     The performance difference can be clearly noted from this code snippet:
     
     \begin{lstlisting}[language=clojure]
