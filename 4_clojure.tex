@@ -231,11 +231,23 @@ user=>
 
 \subsubsection{Opinion of Design Choices}
 
-    This section is left as an exercise to the reader.
+    Overall, the design choices Rich Hickey made to form the language of Clojure as it is today make sense for the type of language he was seeking to create. I understand that in seeking to eliminate mutable state in favor of immutable variables he needed to embrace functional programming, and the complete paradigm shift that is for every imperative programmer. I for one was just as thrown off by this shift trying to program in a non-imperative way. The evidence and reasoning for making this change remain however. In choosing to make Clojure a Lisp, Hickey was able to embrace Lisp's history of using code-as-data, which helped immensely with the typing of the language. This is not something I really noticed and did not make a difference to me. Again, coding in Lisp was hard because the syntax was extremely foreign to me. The concurrency support however was a design choice I embraced wholeheartedly. Once I was able to figure out the syntax, using the concurrent primitives in my program was one of the easiest things about the language of Clojure. The support given to concurrency and parallelism in the language of Clojure is seemingly unparalleled in other languages and it appears that for the first time, if one can truly understand Clojure programming, there are not any concurrent gnomes or trolls out to get you. All in all the design choices Hickey made have turned Clojure into what it is, a robust and general-purpose dynamic functional lisp that heavily supports concurrency from the bottom up, running on the universally portable Java Virtual Machine.
 
-\subsection{Comparison to General-Purpose Languages (Java)}
+\subsection{Comparison to Java}
 
-    Recall what Clojure added, did differently and generally summarize
+    It might be difficult to compare some parts of Clojure to Java, considering that it utilizes countless Java libraries underneath its own data structures, and even runs on the JVM. Since Clojure really is just bytecode on the JVM, how different can it be from Java itself?
+    
+    Most obviously, Java is a much more complex and large language compared to Clojure. Java has far more of a community presence providing source code, tutorials, and stackoverflow answers. User support for Clojure is thinner and harder to find. Another difference is that Java has many well built and fully loaded IDE's, while Clojure really doesn't have any. LightTable IDE is seeking to be for Clojure what Eclipse and Intellij are for Java, but its really not there yet.
+    
+    Under the hood is the first real place you will see differences though. In Java, only a subsection of the language was designed to be concurrent, and all of the concurrency must be implemented by the user and enforced by the user through the use of manual locks and synchronize methods. In Clojure, concurrency was a part of the original design and throughout the entire language, concurrency is supported and enforced.
+    
+    Clojure is better for mathematical functions and calculations due to its support for variable arity functions, recursion, and stackless recursion via the \textbf{recur} function. Java forces you to resort to using static class methods to implement ''true'' functions.
+    
+    Clojure does better with data processing and transformation due to the fact that it is a list processing language. Clojure easily handles reading data, normalizing it, transforming it, filtering it, selecting from it, aggregating it, and doing any other kind of function on it. Clojure's sequence library is full of functionality to support this. In the Java world, only version 8 provides support for lambda function application to collections which is far more complex than what Clojure has to offer.
+    
+    Clojure also provides support for lazy sequences best used with large quantities of data in streams.
+    
+    Finally, the most important comparison to make is about the reliability of Java code versus Clojure code. Java code is plagued with all of the problems of mutable data structures and is constantly at risk of race conditions due to its pathetic support for concurrency. For programmers tackling the modern problems of the world with concurrency, Clojure is going to be a no-brainer must have.
 
 \subsection{Sample Program}
 
