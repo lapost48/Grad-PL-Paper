@@ -2,8 +2,6 @@
 \subsection{Introduction to Clojure}
 
 \paragraph{History of Clojure}
-    % Get this from the Internet and what we already have
-    % Dates, Who wrote it, Releases
     
     Clojure was first introduced to the public on October 16, 2007 by creator Rich Hickey. Hickey wanted a "Lisp-friendly" interface to Java that could be used as a modern Lisp functional programming language and specifically designed for concurrency. Hickey worked on Clojure for nearly two and half years before its initial release in 2007, without much outside funding. Since then, Clojure has had nine more releases introducing features like primitive support, improved hashing algorithms, direct linking, and socket servers, just to name a few. The latest release was on January 19, 2016. Release 1.9 is currently in the works.
     \cite{ClojureHistory_GitHub_Website}
@@ -11,7 +9,7 @@
     
 \paragraph{Clojure Fundamentals}
     
-    Clojure is a dynamic, general-purpose programming language that supports concurrency and functional programming. As part of functional programming this includes immutable, persistent data structures and the absence of mutable local variables. As a dynamic language, every one of Clojure's feature is supported at run-time. Clojure has been derived from the language Lisp and inherits the ''code-as-data'' philosophy and macro system features from Lisp. Clojure is hosted on the Java Virtual Machine (JVM), sharing the JVM type system and threads. Clojure also offers great concurrency support as it was built into the design of the language from the very beginning. Clojure is a community-driven development process (open source) and is handled by Clojure community website.  
+    Clojure is a dynamic, general-purpose programming language that supports concurrency and functional programming. As part of functional programming this includes immutable, persistent data structures and the absence of mutable local variables. As a dynamic language, every one of Clojure's features is supported at run-time. Clojure has been derived from the language Lisp and inherits the ''code-as-data'' philosophy and macro system features from Lisp. Clojure is hosted on the Java Virtual Machine (JVM), sharing the JVM type system and threads. Clojure also offers great concurrency support as it was built into the design of the language from the very beginning. Clojure is a community-driven development process (open source) and is handled by Clojure community website.  
     \cite{ClojureConcurrencySupport_Slides_Hickey}
     
 \paragraph{Why Clojure?}
@@ -39,8 +37,8 @@
     Clojure takes advantage of all that the JVM platform has to offer. Clojure is hosted on the JVM, sharing the JVM type system and threads. All functions developed are compiled down to JVM bytecode. In addition, Clojure supports dynamic implementation of Java interfaces and classes. Creator Rich Hickey is known for fondly saying, "Write Java in Java, consume and extend Java from Clojure." Clojure is the language, JVM is the platform. \cite{JVMHostedLanguages_DependencyOnJava_JournalArticle_Li}
     
     \paragraph{OOP}
-    Another design choice that Rich made was that Object Orientated was overrated. OO Programming was left out of Clojure's implementation for various reasons with Hickey arguing that mutable state objects are the "new spaghetti code", due to their being inherently tough to comprehend, test, and reason about. Another of Rich's complaints was that OO Programming was horrible for use with concurrency. All of these complaints together caused Rich to leave OOP out of his design for Clojure. 
-    Instead, Clojure represents its data structures as immutable objects modeled by interfaces, therefore Clojure doesn't have it's own class system. However, inheritance isn't the only way to produce polymorphism. Clojure has in fact dynamic polymorphism, allowing Clojure to have systems to be extensible and flexibile. Clojure includes multimethods which decouple polymorphism from Object Orientated design and types. This allows for Clojure to "dispatch via static, dynamic or external properties, metadata, etc." 
+    Another design choice that Rich made was that Object Orientated was overrated. OO Programming was left out of Clojure's implementation for various reasons with Hickey arguing that mutable state objects are the "new spaghetti code", due to their being inherently tough to comprehend, test, and reason about. Another of Rich's complaints was that OO Programming was horrible for use with concurrency. These complaints together caused Rich to leave OOP out of his design for Clojure. 
+    Instead, Clojure represents its data structures as immutable objects modeled by interfaces, therefore Clojure doesn't have its own class system. However, inheritance isn't the only way to produce polymorphism. Clojure has in fact dynamic polymorphism, allowing Clojure's systems to be extensible and flexibile. Clojure includes multimethods which decouple polymorphism from Object Orientated design and types. This allows for Clojure to "dispatch via static, dynamic or external properties, metadata, etc." 
     \cite{ClojureConcurrencySupport_Slides_Hickey}
       
     \paragraph{Concurrency}
@@ -80,36 +78,27 @@
     
     \subparagraph{Immutable Data Structures}
     
+    
     Because Clojure is functional, it doesn't allow mutable state, so the easiest way to implement this was by using immutable data structures as immutable values in the language that can never change. Examples of values in the language include a number, maps, and even a vector with three elements. Whenever in Clojure a user attempts to modify a value (data structure) and change its state, a new value is produced instead. Clojure's data structures like lists, vectors, sets, and maps are all immutable, meaning that adding or removing something from an immutable collection is really just creating a new collection that reflects the change.  
     
     The idea is known as having \textit{persistent} data structures. Identities in Clojure are named entities which change over time, and get new values. A counter may have a value of 42, but after incrementing it, the value is 43: Same counter, same identity, different value. This is different from other languages where variables serve as identities that typically point to a mutable value which are modified in place. \cite{clojure_website:reference}
     
     Now despite the benefits of immutable data structures, there are performance setbacks to creating new data structures, mutating them, and then returning them for immutable use afterwards. Mutating an entire array like that is already O(n). Clojure gets around these performance issues by utilizing Transient Data Structures. Transient Data Structures are ``copies'' of the original data structure that share the source without modifying it. Transients support read-only interfaces like \textbf{nth}, \textbf{get}, and \textbf{count}, but require the use of alternate transient functions (\textbf{assoc!}, \textbf{conj!}) instead of \textbf{assoc} and \textbf{conj} to support parallel `changing' operations. These transient functions allow values to be changed but will only return transient values back. When all desired results have been achieved, the programmer can create a persistent data structure from the transient data structure by calling \textbf{persistent!} on the transient data structure. In all cases performing operations with Transient Data Structures are O(1) and this is a significant performance enhancement.
- 
-\subsubsection{Data Structures}
-
-    As alluded to in the previous section, Clojure's data structures are immutable. Some other properties of Clojure's data structures are:
-    \begin{itemize}
-        \item They are Read-able
-        \item They support proper value equality semantics in their implementation of equals
-        \item They provide good hash values
-    \end{itemize}
-    \cite{website:clojure-lang-reference} Despite the benefits of immutable data structures, there are performance setbacks to creating new data structures, mutating them, and then returning them for immutable use afterwards. Mutating an entire array like that is already O(n). Clojure gets around these performance issues by utilizing Transient Data Structures. Transient Data Structures are ``copies'' of the original data structure that share the source without modifying it. Transients support read-only interfaces like \textbf{nth}, \textbf{get}, and \textbf{count}, but require the use of alternate transient functions (\textbf{assoc!}, \textbf{conj!}) instead of \textbf{assoc} and \textbf{conj} to support parallel `changing' operations. These transient functions allow values to be changed but will only return transient values back. When all desired results have been achieved, the programmer can create a persistent data structure from the transient data structure by calling \textbf{persistent!} on the transient data structure. In all cases performing operations with Transient Data Structures are O(1) and this is a significant performance enhancement.
 
     The performance difference can be clearly noted from this code snippet:
     
     \begin{lstlisting}[language=clojure]
 (defn vrange [n]
-	(loop [i 0 v []]
-		(if (< i n)
-			(recur (inc i) (conj v i))
-			v)))
+  (loop [i 0 v []]
+    (if (< i n)
+	  (recur (inc i) (conj v i))
+	    v)))
 
 (defn vrange2 [n]
-	(loop [i 0 v (transient [])]
-		(if (< i n)
-			(recur (inc i) (conj! v i))
-			(persistent! v))))
+  (loop [i 0 v (transient [])]
+    (if (< i n)
+	  (recur (inc i) (conj! v i))
+	    (persistent! v))))
 
 ;;benchmarked(Java 1.8, Clojure 1.7)
 (def v (vrange 1000000))  ;; 73.7 ms
@@ -202,11 +191,12 @@ user=>
     
     \begin{lstlisting}[language=clojure]
 (defn factorial [n]
-    (apply * (map bigint (range 1 (inc n))))) 
+  (apply * (map bigint (range 1 (inc n))))
+  ) 
     
 (def result (future (factorial 10000)))
-	... do some other things here ...
-	(deref result)
+  ... do some other things here ...
+  (deref result)
     \end{lstlisting}
     
     Like in the previous concurrent structures, \textbf{deref} returns the result of the operation when you call it. In this case futures can be used to hand off heavy computation to other threads, continue to allow execution of the main thread, and then make a call to the result with \textbf{deref} when the main thread needs it. If the other thread did not finish the computation yet, then the main thread will block until a result can be returned. Simply put, using futures is the easiest way to do threading that is unrelated to the work of the main thread.
@@ -235,7 +225,8 @@ user=>
 (defn check-party-guest-count [p]
     (if (realized? p)
 	    (deref p)
-	    (prn "Don't know the guest count yet, call later")))
+	    (prn "Don't know the guest count
+	        yet, call later")))
 
 (deliver guest-count 50)    
     \end{lstlisting}
