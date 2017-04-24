@@ -5,8 +5,220 @@
 	The core principle of Go is to reduce complexities present in modern programming languages, concurrent programming is one such complexity. The new language provides an approach in which shared values are easily passed between sequential processes. The medium of communication, variable passing, is referred to as a channel. CSP introduced the concept of channels for inter-process communication in a book written by Hoare, published after his original paper. This method of operation, in which processes (goroutines) communicate through channels, is analogous to the programming style of message passing. The use of channels ensures that variables are never actively shared by separate processes, thus data races can never occur. The Go concurrent methodology can be reduced to its slogan, “Do not communicate by sharing memory; instead, share memory by communicating”. \cite{website:go-lang-documentation}
 	
 	Go’s concurrent programming is based on two fundamentals: goroutines and channels. Goroutines have a simple model and can be thought as lightweight threads. Channels serve to handle both communication and synchronization. By default Go’s channels are synchronous, and channels are unbuffered when a buffer size is not specified. \cite{prell:hal-00718924} The specifics of Go’s channel will be discussed later, but first we will cover goroutines, for channels exist to serve them. Lastly, we will discuss parallelization in Go and apply it within our matrix multiplication code.
+\subsection{Language Basics}
+The Go programming language is syntactically simplistic. While its syntax is akin to the C language family, Go noticeably reduces the number of characters required to perform basic functionality, such as variable declarations and control structures. Additionally, the basic types and data structures of Go are straightforward in functionality and syntax.
+\begin{lstlisting}[language=Go]
+// Go supports single line comments.
+/* As well as multiple
+line comments. */
+
+// An example of Go's code reduction
+/* Variable declaration and 
+initialization */
+var i int
+i = 1
+/* The same code can be
+accomplished with the := */
+i := 1
+\end{lstlisting}
+\subsubsection{Semicolons}
+Similar to C, Go uses semicolons in its formal grammar to terminate statement. However, semicolons are not required in the source code as Go's lexical analyzer will insert semicolons as needed, so the convention of writing go code is to omit semicolons. Semicolons are only necessary if you were to write multiple statements of code on one line. Places such as for loop clauses naturally have multiple statements on one line and require a semicolon to separate the initializer, condition, and continuation elements.\cite{website:go-lang-documentation}
+
+Due to the rules of Go's lexical analyzer there are some ways to write code that looks okay but will cause unexpected error.
+\begin{lstlisting}[language=Go]
+a := true
+if a
+{
+    a = false
+}
+/* This will throw a couple of errors as
+Go's lexer will insert a semicolon at
+the end of line 2, if a; */
+if a{
+    a = false
+}
+// The right way
+\end{lstlisting}
+\subsubsection{Types}
+The numerical types of Go include int and uint, signed and unsigned integers, and the two default to 32 bit or 64 bit depending on the system. Also, the size of these types can be specified upon declaration as 8 bit, 16 bit, 32 bit or 64 bit (int8, int16, uint8, uint16, etc.). Additional numerical types include uintptr (an integer sized pointer that can store the uninterpreted bits of a pointer value), byte (alias for uint8), rune (alias for int32), float32 and float64, complex64 and complex128. Additional basic types include strings and booleans, declared in the language as string and bool respectively.
+
+Go includes an array and slice type for indexing a sequence of elements of a single type. The slice type is a segment of an underlying array. Multiple slices can share the same underlying array while an array always represents distinct storage. The length of an array or slice can be found by the built-in function len(). A slice's capacity refers to the length of its underlying array, as the array may extend past the end of the slice, and can be found by using the cap() function on a slice. Both arrays and slices are immutable.
+\cite{website:go-lang-spec}
+\begin{lstlisting}[language=Go]
+s := make([]string, 2, 3)
+/* A slice of length 2 with an
+underlying array of length 3 */
+fmt.Println(len(s)) // 2
+fmt.Println(cap(s)) // 3
+fmt.Println(s[0]) // An empty string
+/* A slice of any numerical type would
+print 0 (except complex, 0+0i),
+a slice of bool type prints false */
+s[0] = "Hello"
+s[1] = "World!"
+s = append(s, "Goodbye")
+/* As slices are immutable an append
+function is required to add the third
+element. */
+fmt.Println(len(s)) // 3
+fmt.Println(cap(s)) // 3
+s = append(s, "World!")
+fmt.Println(len(s)) // 4
+fmt.Println(cap(s)) // 6
+/* When a slice exceeds capacity
+the underlying array doubles in length. */
+\end{lstlisting}
+Go also includes a map type. Maps in Go function similarly to other languages, they are an unordered collections of elements of one type, the value. The key is another type and must be a unique value. \cite{website:go-lang-spec}
+\begin{lstlisting}[language=Go]
+x := make(map[string]int)
+// Initializes a new empty map
+/* An initial capacity can be specified but
+does not bound its size */
+y := make(map[string]int, 100)
+// A map can be initialized with values 
+z := map[string]int{"one" : 1}
+// len() can be used on maps.
+fmt.Println(len(x)) // 0
+fmt.Println(len(y)) // 0
+fmt.Println(len(z)) // 1
+\end{lstlisting}
+A struct type in Go consists of fields with a variable name and type. Though, a field name can be omitted and the type name suffices as the field name. \cite{website:go-lang-spec}
+\begin{lstlisting}[language=Go]
+/* An example struct from our matrix
+multiplacation code */
+type Matrix2d struct{
+        Rows int
+        Columns int
+        Matrix []float64
+}
+s := make([]float64){2.0, 1.0, 4.0, 3.0}
+m := Matrix2d{2, 2, s}
+fmt.Println(m.Matrix)
+/* The float64 slice is formatted to a
+string and printed to standard output. */
+/* The Matrix field can be written as
+and embedded field */
+type Matrix2d struct{
+        Rows int
+        Columns int
+        []float64
+}
+s := make([]float64){2.0, 1.0, 4.0, 3.0}
+m := Matrix2d{2, 2, s}
+fmt.Println(m.[]float64)
+/* The same could be done for Rows or
+Columns, but not both because they share
+the same type. */
+\end{lstlisting}
+\subsubsection{Operators}
+\begin{center}
+\begin{tabular}{ | m{3.5em} | m{14em}| m{3.5em} | }
+\hline
+Operator & Description & Example  \\ [0.4ex] 
+\hline
++& Adds 2 operands & A + B\\ 
+\hline
+- & Subtracts 2nd operand from 1st	 & A - B \\ 
+\hline
+* & Multiplies both operands & A * B \\ 
+\hline
+/	 & Divides numerator by de-numerator & A * B \\ 
+\hline
+\% & Modulus Operator and remainder of after an integer division & B \% A  \\ 
+\hline
+++	 & Increments integer value by one	 & A++ \\
+\hline
+- -	 & Decrements integer value by one & A - - \\
+\hline
+==&Checks if the values of 2 operands are equal & A == B\\ 
+\hline
+!=& Checks if the values of 2 operands are equal, if they equal return false & A != B\\ 
+\hline
+\textgreater&Checks if the value of left operand is greater than that on the right & A \textgreater B\\ 
+\hline
+\textless& Checks if the value of left operand is less than the value on the right & A \textless B\\ 
+\hline
+\textgreater=& Checks if the right operand is greater than or equal to the left & A \textgreater= B\\ 
+\hline
+\textless=& Checks if the left operand is greater than or equal to the right  & A \textless= B\\ 
+
+\hline
+\end{tabular}
+\end{center}
+\subsubsection{Control Structures}
+\subparagraph{If Statements:} If statements in Go have a very similar syntax as those in other languages. The syntax is generally written as:
+\begin{lstlisting}[language=Go]
+if a < 5 
+{
+    return b
+}
+\end{lstlisting}
+
+Though in some occasions it a may be useful to to add an initialization statement to an if statement. This will allow you to check if a condition was met when the variable was assigned a value.
+\begin{lstlisting}[language=Go]
+if x :=y; x != 5 
+{
+    log.Print("x is not 5")
+    return x
+}
+\end{lstlisting}
+\subparagraph{Switches:}
+Switches in Go are similar to many other languages. The switch stamen is given a variable to check conditions, if any of the conditions are met execute given code. For example
+\begin{lstlisting}[language=Go]
+func printRating(n int) string
+{
+    switch {
+    case n <= 3:
+       return "Bad"
+    case n < 3 && n <= 6:
+        return "Normal"
+    case n < 6:
+        return "Good"
+    }
+    return "Rating Not Found"
+}
+\end{lstlisting}
+Switch statements can also be used to determine the dynamic type of an interface variable.\cite{website:go-lang-documentation}
+\begin{lstlisting}[language=Go]
+var t interface{}
+t = functionOfSomeType()
+switch t := t.(type) {
+    default:
+        fmt.Printf("unexpected type", t)     
+        // %T prints whatever type t has
+    case bool:
+        fmt.Printf("boolean", t)             
+        // t has type bool
+    case int:
+        fmt.Printf("integer", t)             
+        // t has type int
+    case *bool:
+        fmt.Printf("pointer to bool",*t) 
+        // t has type *bool
+    case *int:
+        fmt.Printf("pointer to int",*t) 
+        // t has type *int
+}
+\end{lstlisting}
+\subparagraph{Loops:} 
+Loops in C can be closely compared to those in the C language, but they are not the same. Some  examples of different loops are: \cite{website:go-lang-documentation}
+\begin{lstlisting}[language=Go]
+// Similar to a C for
+for init; condition; post { }
+
+// Similar to a C while
+for condition { }
+
+//Similar to a for-each loop
+for index,element := range someArray {
+    fmt.Printf("element: ", element)
+    fmt.Printf("element's index = ",index)
+}
+\end{lstlisting}
+
+
 \subsection{Goroutines}
-	The term goroutine was made because existing terms for concurrent processes, such as threads, coroutines, process, etc., convey a meaning that inaccurately describes how Go executes functions concurrently. The goroutine model is simple and lightweight, hiding many of the complexities of thread creation and management. Goroutines execute in the same address space, and memory allocation starts at the cost of a small stack space and grows by allocating and freeing as heap storage requires. Goroutines are multiplexed onto OS threads, not process threads, therefore if one goroutine is to block the others will continue to execute.\cite{website:go-lang-documentation}
+The term goroutine was made because existing terms for concurrent processes, such as threads, coroutines, process, etc., convey a meaning that inaccurately describes how Go executes functions concurrently. The goroutine model is simple and lightweight, hiding many of the complexities of thread creation and management. Goroutines execute in the same address space, and memory allocation starts at the cost of a small stack space and grows by allocating and freeing as heap storage requires. Goroutines are multiplexed onto OS threads, not process threads, therefore if one goroutine is to block the others will continue to execute.\cite{website:go-lang-documentation}
 	A goroutine is created simply by prefixing the keyword \emph{go} to a function call.	
 \begin{lstlisting}[language=Go]
 go innerprod(a, b, ch) 
@@ -14,7 +226,7 @@ go innerprod(a, b, ch)
 // concurrently as a goroutine,
 // do not wait for it to finish.
 \end{lstlisting}
-Function innerprod(a, b, ch) takes the inner product of a row vector \emph{a} and column vector \emph{b}. The parameter \emph{ch} is of type channel, which will be discussed thoroughly in the next section. Then, a detailed explanation of the function will provided in our matrix multiplication program section. To digress, the important point here is to convey the simplicity of creating a goroutine, that any function may be run concurrently by prefixing the keyword \emph{go}. However, if the function does not receive a channel, then the goroutine will not be able to properly return variables or signal its completion.
+Function innerprod(a, b, ch) takes the inner product of a row vector \emph{a} and column vector \emph{b}. The parameter \emph{ch} is of type channel, which will be discussed thoroughly in the next section. Then, a detailed explanation of the function will be provided in our matrix multiplication program section. To digress, the important point here is to convey the simplicity of creating a goroutine, that any function may be run concurrently by prefixing the keyword \emph{go}. However, if the function does not receive a channel, then the goroutine will not be able to properly return variables or signal its completion.
 \begin{lstlisting}[language=Go]
 func badgoroutine(a, b){
 	result := go innerprod(a, b)
@@ -34,7 +246,7 @@ func Announce(message string,
     }()  
     /* Note the parentheses - must
        call the function. */
-}.
+}
 \end{lstlisting}
 \subsection{Channels}
 Channels use the make() function to allocate themselves, the resulting value references the underlying data structure. If you add an integer value as a second parameter (you do not have to add an integer as the second parameter because it is optional) it sets the buffer size of that channel. For example (all following examples were obtained from \cite{website:go-lang-documentation}): 
@@ -44,11 +256,11 @@ ci := make(chan int)
 
 Creates a channel on integers that is unbuffered. Interestingly enough, because the second parameter is optional if it is not entered the default value is 0 so it is the same as coding:
 \begin{lstlisting}[language=Go]
-cj := make(chan int, 0)
+cj := make(chan *int, 0)
 \end{lstlisting}
 But if you do enter something other than 0 like follows:
 \begin{lstlisting}[language=Go]
-cs := make(chan int, 100) 
+cs := make(chan *int, 100) 
 \end{lstlisting}
 It creates a buffered channel of pointers to integers. 
 
@@ -93,7 +305,7 @@ func Serve(clientRequests chan
 } 
 \end{lstlisting}
 
-A very important property to remember in Go is the first class values can be passed around like any other values. This can be used to to create safe and parallel demultiplexing. As an example we will be dissecting the handle function from above. If you recall, in the previous example, we did not define the type it was handling. If the type has a channel where it can reply the client is able to determine its own path to the answer. This is a schematic of type Result :
+A very important property to remember in Go is that first-class values can be passed around like any other values. This can be used to to create safe and parallel demultiplexing. As an example we will be dissecting the handle function from above. If you recall, in the previous example, we did not define the type it was handling. If the type has a channel where it can reply the client is able to determine its own path to the answer. This is a schematic of type Result :
 \begin{lstlisting}[language=Go]
 type Request struct {
     args        []int
@@ -110,7 +322,7 @@ func sum(a []int) (s int) {
     return
 }
 
-request := &Request{[]int{3, 4, 5}, 
+request := &Request{[]int{3, 4, 5},
 	 	sum, make(chan int)}
 // Send request
 clientRequests <- request
@@ -128,6 +340,78 @@ func handle(queue chan *Request) {
 } 
 \end{lstlisting}
 This is the general framework for a rate-limited, parallel, non-blocking RPC system.
+\subsection{Go Concurrency Patterns}
+\subsubsection{Generator}
+As previously mentioned, channels are first-class values and can be returned by functions. We can write a function that executes a goroutine and then returns the channel being used by it.
+\begin{lstlisting}[language=Go]
+//Returns a recieve-only channel
+func echo(msg string) <-chan string{
+  c := make(chan string)
+  go func() {
+    for i:=0; ; i++{
+      c <- fmt.Sprint("%s %d", msg, i)
+      time.Sleep(time.Duraction(
+      rand.Intn(1e3)) * time.Millisecond)
+    }
+  }()
+  return c
+}
+\end{lstlisting}
+The echo function above makes a channel and in an anonymous goroutine fills that channel with a string. The channel is unbuffered so when one string is passed the channel becomes full and the goroutine blocks until the receiver of the channel receives the value.
+\begin{lstlisting}[language=Go]
+c := echo("hi!")
+for i:=0; i<5; i++{
+  fmt.Printf("Echoing: %q\n", <-c)
+}
+fmt.Println("goodbye!")
+\end{lstlisting}
+The above code prints the messages stored in the channel as they are added. After five prints the code above exits. Though if the code were to continue, the goroutine created in echo will continue to push strings to the channel, as long as the values are being received. \cite{video:go-concurr-patterns}
+\subsubsection{Multiplexing}
+\begin{lstlisting}[language=Go]
+func main(){
+  hi := echo("hi!")
+  bye := echo("bye!")
+  for i:=0; i<5; i++{
+    fmt.Println(<-hi)
+    fmt.Println(<-bye)
+  }
+}
+\end{lstlisting}
+Reusing the echo function from above, this main function will always print the "hi" message followed by the "bye" message. Even if the bye channel is ready before the hi channel, it must wait for the hi channel to stop blocking. By using a fan function we can direct both of the channels into one and then receive values from that channel. The "hi!" and "bye!" messages will print as they are recieved, and will no longer be restricted to printing in a particular order. \cite{video:go-concurr-patterns}
+\begin{lstlisting}
+func fanIn(input1, input2 <-chan string)
+<-chan string{
+  c := make(chan string)
+  go func() { for { c <-<-input1 } }()
+  go func() { for { c <-<-input2 } }()
+  return c
+}
+\end{lstlisting}
+\begin{lstlisting}
+func main(){
+  c := fanIn(echo("hi!"), echo("bye!"))
+  for i:=0; i<10; i++{
+    fmt.Println(<-c)
+  }
+}
+
+\end{lstlisting}
+\subsubsection{Select}
+The select control structure was designed for concurrency, and to be used with goroutines and channels. 
+\begin{lstlisting}[language=Go]
+select{
+case v1 := <-c1:
+  fmt.Printf("received %v from c1\n", v1)
+case v2 := <-c2:
+  fmt.Printf("received %v from c1\n", v2)
+case c3<-23:
+  fmt.Printf("sent %v from c3\n", 23)
+default:
+  fmt.Printf("no one was 
+    ready to communicate\n")
+}
+\end{lstlisting}
+All of the channels are evaluated and if one channel can proceed then it does, but if no channel can proceed then the select blocks. If multiple channels can proceed then one is chosen psuedo-randomly, thus the order at which these cases would occur can not be guaranteed. The default will execute if there are no ready channels.\cite{video:go-concurr-patterns}
 \subsection{Parallelization}
 Parralelism is the methodology of constructing a program to efficiently execute calculations on multiple cores. Go is a concurrent language and was modeled for structuring programs as independently executing components, thus not all parallelization problems are guaranteed to be a good fit for Go. Although, with the use of Go's concurrent features some parralelization problems can be approached in Go, such as we have done with matrix multiplication. Goroutines are used to execute the individual computations and a channel is used to signal there completion. \cite{website:go-lang-documentation}
 \begin{lstlisting}[language=Go]
@@ -209,5 +493,5 @@ The number of seconds to multiply two N by N matrices. For each N, the program w
 \subsection{Our Experience}
 Our time spent implementing the Go Programming Language has been above satisfactory. Goroutines and channels, an elegant yet powerful concurrency model, are a pleasure to work with. Though our matrix multiplication implementation was a parralelization problem rather than a concurrent, the simplicity in which goroutines communicate via shared channels feels intuitive.
 
-Likewise, the Golang documentation is thorough and incredibly helpful. There are many "Go by example" we pages available, in which you can see how a particular package or function is implemented, and you can even run the sample code in your web browser. However, since Go is a relatively young language, there was difficulty in finding sources that provided any extra information that the documentation already had not, and in many cases the documentation would be the only source of these papers. Also, many sources would be out of data, as parts of Go, for example the runtime, are continually in development.
+Likewise, the Golang documentation is thorough and incredibly helpful. There are many "Go by example" we pages available, in which you can see how a particular package or function is implemented, and you can even run the sample code in your web browser. However, since Go is a relatively young language, there was difficulty in finding sources that provided any extra information that the documentation already had not, and in many cases the documentation would be the only source of these papers. Also, many sources would be out of data as parts of Go, for example the runtime, are continually in development.
 
