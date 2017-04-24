@@ -1,3 +1,9 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                               %
+%                       GO                                                      %
+%                                                                               %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 @misc{website:go-lang-documentation,
     author = "Google",
     title = "Effective Go",
@@ -35,10 +41,65 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                               %
-%               Sources from different computer scientist books                 %
+%                       SWIFT                                                   %
 %                                                                               %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+@misc{website:swift-lang-user-guide,
+    author = "The Swift Project Team",
+    title = "Swift - User Guide",
+    url = "http://swift-lang.org/guides/release-0.96/userguide/userguide.html"
+}
+
+@article{wilde2011swift,
+    title={Swift: A language for distributed parallel scripting},
+    author={Wilde, Michael and Hategan, Mihael and Wozniak, Justin M and Clifford, Ben and Katz, Daniel S and Foster, Ian},
+    journal={Parallel Computing},
+    volume={37},
+    number={9},
+    pages={633--652},
+    year={2011},
+    publisher={Elsevier}
+}
+
+@article{wilde2009parallel,
+    title={Parallel scripting for applications at the petascale and beyond},
+    author={Wilde, Michael and Foster, Ian and Iskra, Kamil and Beckman, Pete and Zhang, Zhao and Espinosa, Allan and Hategan, Mihael and Clifford, Ben and Raicu, Ioan},
+    journal={Computer},
+    volume={42},
+    number={11},
+    year={2009},
+    publisher={IEEE}
+}
+
+@inproceedings{hategan2011coasters,
+    title={Coasters: uniform resource provisioning and access for clouds and grids},
+    author={Hategan, Mihael and Wozniak, Justin and Maheshwari, Ketan},
+    booktitle={Utility and Cloud Computing (UCC), 2011 Fourth IEEE International Conference on},
+    pages={114--121},
+    year={2011},
+    organization={IEEE}
+}
+
+@inproceedings{woitaszek2011parallel,
+  title={Parallel high-resolution climate data analysis using swift},
+  author={Woitaszek, Matthew and Dennis, John M and Sines, Taleena R},
+  booktitle={Proceedings of the 2011 ACM international workshop on Many task computing on grids and supercomputers},
+  pages={5--14},
+  year={2011},
+  organization={ACM}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                               %
+%                       CLOJURE                                                 %
+%                                                                               %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%----------------------------------------------------------------
+%               Sources from different computer scientist books
+%----------------------------------------------------------------
 
 @book{ClojureProgramming_Book_EmerickCarperGrand, place={Beijing}, title={Clojure: programming}, publisher={O'Reilly}, author={Emerick, Chas and Carper, Brian and Grand, Christophe}, year={2012}}
 
@@ -48,11 +109,8 @@
 
 @book{ClojureForTheBraveAndTrue_Book_Higginbotham, edition={1}, title={Clojure for the Brave and True: Learn the Ultimate Language and Become a Better Programmer}, publisher={No Starch Press}, author={Higginbotham, Daniel}, year={2015}}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                                                                               %
-%       Sources from different computer scientist websites and blogs            %
-%                                                                               %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%       Sources from different computer scientist websites and blogs
 
 @misc{ClojuresSecretWeapon_Website_AdamBard, title={Live development is the way of the future}, url={https://adambard.com/blog/fireplace-dot-vim-clojures-secret-weapon/}, journal={Adam Bard Makes Websites}, author={Bard, Adam}, year={2013}, month={Jul}}
 
@@ -66,11 +124,9 @@
 
 @misc{ClojureConcurrencySupport_Slides_Hickey, title={A Dynamic Programming Language for the JVM}, publisher={Clojure}, author={Hickey, Rich}, year={2013}, month={Oct}}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                                                                               %
-%               Sources directly from the Clojure Website                       %
-%                                                                               %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%----------------------------------------------------------------
+%               Sources directly from the Clojure Website
+%----------------------------------------------------------------
 
 @misc{clojure_website:reference,
     author = "Clojure",
@@ -109,11 +165,9 @@
 
 @misc{ClojureDocumentation_pmap, title={pmap}, url={https://clojuredocs.org/clojure.core/pmap}, journal={pmap - clojure.core}, publisher={ ClojureDocs - Community-Powered Clojure Documentation and Examples}, author={Hickey, Rich}}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                                                                               %
-%                       Academic and Scholarly Sources                          %
-%                                                                               %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%----------------------------------------------------------------
+%                       Academic and Scholarly Sources
+%----------------------------------------------------------------
 
 @misc{MUTS_SoftwareTransactionalMemory_JournalArticle_Goodman,
     author = {Daniel Goodman and Behram Khan and Salman Khan and Chris Kirkham and Mikel Luján and Ian Watson},
@@ -172,7 +226,7 @@
  publisher = {ACM},
  address = {New York, NY, USA},
  keywords = {clojure, dynamic metrics, java, jruby, jython, workload characterization},
-} 
+}
 
 @inproceedings{MultiCoreParallelizationClojure_JournalArticle_Kraus,
     author = {Kraus, Johann M. and Kestler, Hans A.},
@@ -207,6 +261,32 @@
  address = {Riverton, NJ, USA},
 }
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                               %
+%                       MISC                                                    %
+%                                                                               %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+@article{numpy,
+  author    = {St{\'{e}}fan van der Walt and
+               S. Chris Colbert and
+               Ga{\"{e}}l Varoquaux},
+  title     = {The NumPy array: a structure for efficient numerical computation},
+  journal   = {CoRR},
+  volume    = {abs/1102.1523},
+  year      = {2011},
+  url       = {http://arxiv.org/abs/1102.1523},
+  timestamp = {Mon, 05 Dec 2011 18:04:55 +0100},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/corr/abs-1102-1523},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@inproceedings{cuppu2001concurrency,
+  title={Concurrency, latency, or system overhead: Which has the largest impact on uniprocessor DRAM-system performance?},
+  author={Cuppu, Vinodh and Jacob, Bruce},
+  booktitle={Computer Architecture, 2001. Proceedings. 28th Annual International Symposium on},
+  pages={62--71},
+  year={2001},
+  organization={IEEE}
+}
